@@ -16,6 +16,10 @@ Requires python3.6 or higher
 import random
 import collections
 
+
+NUM_OF_CLUSTERS = 3
+TYPES_INSIDE_CLUSTER = ["with_text", "without_text"]
+
 def calculate_probs(probs, cluster, liked):
     """
     This function recalculates probabilities of choosing meme from given clusters
@@ -47,13 +51,12 @@ def calculate_probs(probs, cluster, liked):
         pass
     return probs
 
-clusters = range(3)
-types_inside_cluster = ["with_text", "without_text"]
+clusters = range(NUM_OF_CLUSTERS)
 probs = collections.OrderedDict()
 
 for cluster_number in clusters:
-    for cluster_type in types_inside_cluster:
-        probs[f"cluster_{cluster_number}_{cluster_type}"] = 1/(len(clusters)*len(types_inside_cluster))
+    for cluster_type in TYPES_INSIDE_CLUSTER:
+        probs[f"cluster_{cluster_number}_{cluster_type}"] = 1/(len(clusters)*len(TYPES_INSIDE_CLUSTER))
 
 print(probs)
 print(probs.keys())
