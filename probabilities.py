@@ -70,13 +70,12 @@ def calculate_probs(probs, cluster, liked):
     """
     if int(liked) == 1:
         logging.info(f"image rated: {liked}, calculating probs...")
-        sum_of_probs_without_given_cluster = 0
         for key in probs:
             if key == cluster:
                 continue
             else:
                probs[key] /= PROBS_FACTOR
-               sum_of_probs_without_given_cluster += probs[key]
+        sum_of_probs_without_given_cluster = dictionary_sum({key:probs[key] for key in probs if key != cluster})
         probs[cluster] = 1 - sum_of_probs_without_given_cluster
     elif int(liked) == 0:
         logging.info(f"image rated: {liked}, calculating probs...")
