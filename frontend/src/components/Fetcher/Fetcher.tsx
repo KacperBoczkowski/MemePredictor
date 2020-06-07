@@ -6,13 +6,14 @@ interface IFetcher {
   page: number
 }
 
-interface IDataItem {
+interface IData {
+  cluster: string,
   id: string,
-  author: string
+  image: string
 }
 
 const useFetcher = ({ url, page }: IFetcher) => {
-  const [data, setData] = useState<IDataItem[]>([])
+  const [data, setData] = useState<IData[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
@@ -23,10 +24,10 @@ const useFetcher = ({ url, page }: IFetcher) => {
       setLoading(true)
 
       try {
-        const response = await axios({ method: 'GET', url, params: { page, limit: 10 } })
+        const response = await axios({ method: 'GET', url })
 
         setData((prevData) => [...prevData, ...response.data])
-        setHasMore(response.data.length > 0)
+        setHasMore(true)
       } catch (e) {
         setError(e)
       } finally {

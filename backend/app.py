@@ -1,4 +1,5 @@
 from flask import Flask, request, send_file, jsonify
+from flask_cors import CORS
 
 import base64
 import io
@@ -6,9 +7,11 @@ import json
 import logging
 import os
 import random
+import uuid
 
 import meme_engine
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/', methods=['GET'])
 def get_meme():
@@ -20,7 +23,7 @@ def get_meme():
     `curl http://localhost:5000/?probabilities=eyJjbHVzdGVyXzAiOiAwLjMzLCAiY2x1c3Rlcl8xIjogMC4zMywgImNsdXN0ZXJfMiI6MC4zM30K`
     """
     probabilities = request.args.get('probabilities')
-    response = {"status": "ok", "image": ""}
+    data = []
     if probabilities is None:
         probabilities = meme_engine.probs
     else:
@@ -32,14 +35,19 @@ def get_meme():
             probabilities = meme_engine.probs
     chosen_cluster = random.choices(list(probabilities.keys()), weights=list(probabilities.values()))[0]
     logging.info(f"Chosen cluster is {chosen_cluster}")
-    memes_files = [f for f in os.listdir(f"memes/{chosen_cluster}") if os.path.isfile(os.path.join(f"memes/{chosen_cluster}", f))]
-    meme_filename = random.choice(memes_files)
-    logging.info(f"Randomly chosen filename is {meme_filename}")
+    meme_files = [f for f in os.listdir(f"memes/{chosen_cluster}") if os.path.isfile(os.path.join(f"memes/{chosen_cluster}", f))]
+    meme_filenames = random.choices(meme_files, k=5)
+    logging.info(f"Randomly chosen filenames are {meme_filenames}")
 
-    with open(f"memes/{chosen_cluster}/{meme_filename}", 'rb') as meme_bites:
-        response["image"] = base64.b64encode(meme_bites.read())
+    for meme_filename in meme_filenames:
+        with open(f"memes/{chosen_cluster}/{meme_filename}", 'rb') as meme_bites:
+            data.append({
+                "cluster": chosen_cluster,
+                "id": uuid.uuid4().hex,
+                "image": base64.b64encode(meme_bites.read())
+            })
 
-    return jsonify(response)
+    return jsonify(data)
 
 @app.route('/update_probabilities', methods=['POST'])
 def update_probabilities():
