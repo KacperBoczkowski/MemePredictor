@@ -1,4 +1,4 @@
-from flask import Flask, request, send_file
+from flask import Flask, request, send_file, jsonify
 
 import base64
 import io
@@ -39,7 +39,7 @@ def get_meme():
     with open(f"memes/{chosen_cluster}/{meme_filename}", 'rb') as meme_bites:
         response["image"] = base64.b64encode(meme_bites.read())
 
-    return response
+    return jsonify(response)
 
 @app.route('/update_probabilities', methods=['POST'])
 def update_probabilities():

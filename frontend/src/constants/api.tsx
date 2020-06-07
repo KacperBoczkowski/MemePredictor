@@ -1,2 +1,1 @@
-export const ROOT : string = 'https://picsum.photos'
-export const LIST : string = 'https://picsum.photos/v2/list'
+export const ROOT: string = process.env.REACT_APP_API || ''
