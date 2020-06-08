@@ -1,4 +1,11 @@
-export interface ResponseItem {
+export interface IFav {
+  id: string,
+  cluster: string,
   image: string,
-  status: string
+  liked: number
+}
+
+export interface IFetcher {
+  url: string,
+  page: number
 }

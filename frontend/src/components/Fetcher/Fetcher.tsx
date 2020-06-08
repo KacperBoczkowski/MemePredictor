@@ -1,33 +1,23 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
-interface IFetcher {
-  url: string,
-  page: number
-}
-
-interface IData {
-  cluster: string,
-  id: string,
-  image: string
-}
+import { N } from '../../constants/items'
+import { IFav, IFetcher } from '../../intefaces'
 
 const useFetcher = ({ url, page }: IFetcher) => {
-  const [data, setData] = useState<IData[]>([])
+  const [favs, setFavs] = useState<IFav[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
-  const [hasMore, setHasMore] = useState(true)
-
   useEffect(() => {
-    const fetchData = async ({ url, page }: IFetcher) => {
+    const fetchData = async () => {
       setLoading(true)
 
       try {
-        const response = await axios({ method: 'GET', url })
+        console.log(favs.slice(-N))
+        const response = await axios({ method: 'POST', url, data: favs.slice(-N) })
 
-        setData((prevData) => [...prevData, ...response.data])
-        setHasMore(true)
+        setFavs((prevData) => [...prevData, ...response.data])
       } catch (e) {
         setError(e)
       } finally {
@@ -35,10 +25,10 @@ const useFetcher = ({ url, page }: IFetcher) => {
       }
     }
 
-    fetchData({ url, page })
+    fetchData()
   }, [url, page])
 
-  return { data, loading, error, hasMore }
+  return { favs, setFavs, loading, error }
 }
 
 export default useFetcher
