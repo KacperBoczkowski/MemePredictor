@@ -1,0 +1,67 @@
+.container {
+  width: 800px;
+  margin: auto;
+  display: grid;
+  grid-gap: 1rem;
+  grid-template-columns: 200px 500px 1fr;
+  grid-template-rows: 60px 1fr;
+  grid-template-areas:
+    "logo header header"
+    "sidebar main ."
+  ;
+}
+
+.logo {
+  grid-area: logo;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo__text {
+  font-family: 'Amatic SC', cursive;
+  font-size: 2.5rem;
+  letter-spacing: .5rem;
+}
+
+.header {
+  grid-area: header;
+}
+
+.sidebar {
+  grid-area: sidebar;
+}
+
+.main {
+  grid-area: main;
+}
+
+.meme {
+  margin-bottom: 1.5rem;
+}
+
+.meme__title {
+  font-size: 1rem;
+  font-weight: normal;
+}
+
+.meme__img {
+  width: 100%;
+}
+
+.meme__footer {
+  display: flex;
+}
+
+.meme__button {
+  border: 0;
+  background: 0 0;
+  cursor: pointer;
+  padding: .5rem;
+  font-size: 1.25rem;
+}
+
+.meme__button:focus {
+  outline: 0;
+}
+
