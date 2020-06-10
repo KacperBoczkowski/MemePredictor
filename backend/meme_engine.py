@@ -1,11 +1,12 @@
 
 import collections
 import logging
+import math
 import random
 import time
 
 module_logger = logging.getLogger("meme_engine")
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 NUM_OF_CLUSTERS = 3
 TYPES_INSIDE_CLUSTER = []
 # PROBS FACTOR MUST BE GREATER THAN 1
@@ -33,7 +34,8 @@ def check_probs(probs):
     This function checks if probabilites sums to 1
     """
     probs_sum = dictionary_sum(probs)
-    assert probs_sum == 1
+    if not math.isclose(probs_sum,1):
+        module_logger.warn("Warning, probablities does not sum up to 1")
 
 def normalize(dictionary):
     """
@@ -80,8 +82,13 @@ def calculate_probs(probs, cluster, liked):
     else:
         module_logger.error("Invalid Rate. This should not happen")
         pass
+    normalization_index = 0
     while dictionary_sum(probs) != 1:
+        normalization_index += 1
+        module_logger.debug(f"Probabilities sums up to {dictionary_sum(probs) }, normalizing....")
         probs = normalize(probs)
+        if normalization_index > 3:
+            break
     check_probs(probs)
     module_logger.info(f"Returning probabilities: {probs}")
     return probs
