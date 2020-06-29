@@ -41,7 +41,7 @@ def vote_memes():
             data.append(dict(
                 id=uuid.uuid4().hex,
                 cluster=meme['cluster'],
-                image=base64.b64encode(meme_bites.read()),
+                image=base64.b64encode(meme_bites.read()).decode('utf-8'),
                 liked=0,
                 probs=probabilities
             ))
